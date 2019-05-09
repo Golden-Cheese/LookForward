@@ -1,0 +1,32 @@
+<html>
+    <head>
+        <title>LookForward</title>
+        <style>
+        </style>
+    </head>
+    <body>
+       <h1>Press Button</h1>
+     <!-- You can use this sugar syntax
+          To define id use '#[id]' instead of 'id=[id]'
+          To define class use '.[class]' instead of using 'class=[class]'
+          So, in below line we have defined button
+          having id btn1
+      -->
+       <button #gotoprojects >Projects</button>
+         <button #gotopeople >People</button>
+
+       <script type="text/tiscript">
+           // listen for click action
+           // on html element having id btn1
+           // in current view
+           // and on event we are showing a
+           // message box saying "Hello"
+           self#gotoprojects.on("click", function() {
+             view.gotoprojects();
+            })
+                       self#gotopeople.on("click", function() {
+             view.gotopeople();
+            })
+       </script>
+    </body>
+</html>
