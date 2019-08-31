@@ -2,31 +2,122 @@
     <head>
         <title>LookForward</title>
         <style>
+            #topbar {
+                width: max-width;
+                height:100%;
+                border: 10px solid black;
+            }
+
+            #contentPane {
+                position:absolute;
+                width: 100%;
+                height: 100%;
+                border: 5px solid blue;
+            }
+
+            .contentdiv {
+                position:absolute;
+                top:0px;
+                left:0px;
+                transition: opacity(linear, 400ms);
+                height: 100px;
+            }
+
+            *[state=hidden]{
+                opacity:0;
+                z-index:0;
+            }
+
+            *[state=visible]{
+                opacity:1;
+                z-index:1;
+            }
+
+            #homediv{}
+            #projectdiv{}
+            #peoplediv{}
         </style>
+
     </head>
     <body>
-       <h1>Press Button</h1>
-     <!-- You can use this sugar syntax
-          To define id use '#[id]' instead of 'id=[id]'
-          To define class use '.[class]' instead of using 'class=[class]'
-          So, in below line we have defined button
-          having id btn1
-      -->
-       <button #gotoprojects >Projects</button>
-         <button #gotopeople >People</button>
+        <!-- You can use this sugar syntax
+        To define id use "#[id]" instead of "id=[id]"
+        To define class use ".[class]" instead of using "class=[class]"
+        So, in below line we have defined button
+        having id btn1</-->
 
-       <script type="text/tiscript">
-           // listen for click action
-           // on html element having id btn1
-           // in current view
-           // and on event we are showing a
-           // message box saying "Hello"
-           self#gotoprojects.on("click", function() {
-             view.gotoprojects();
-            })
-                       self#gotopeople.on("click", function() {
-             view.gotopeople();
-            })
-       </script>
+        <div #topbar>
+            <h1 #title>Home
+                <button #gotohome>Home</button>
+                <button #gotoprojects>Projects</button>
+                <button #gotopeople>People</button>
+            </h1>
+        </div>
+        <div #contentPane>
+            <div #homediv .contentdiv state="visible">
+                <button #gotoprojects>Projects</button>
+                <button #gotopeople>People</button>
+            </div>
+            <div #projectdiv .contentdiv state="hidden">
+                <a>Dummy project content</a>
+            </div>
+            <div #peoplediv .contentdiv state="hidden">
+                <a>Dummy people content</a>
+            </div>
+
+        </div>
     </body>
+
+    <script type="text/tiscript">
+        var ContentPane = $(#contentPane);
+        var HomeContent = $(#homediv);
+        var ProjectContent = $(#projectdiv);
+        var PeopleContent = $(#peoplediv);
+        var CurrentContent = HomeContent;
+        var TopBar = $(#topbar);
+
+        $(#contentPane).setLoading = function(){this.loading=true}
+        event click $(#gotoprojects){
+            var projectsQuery = view.queryProjects()
+            //prepareProjectContent(projectQuery)
+            CurrentContent.attributes["state"]="hidden"
+            CurrentContent = ProjectContent
+            CurrentContent.attributes["state"]="visible"
+            $(#gotohome).state.disabled = false;
+            $(#gotoprojects).state.disabled = true;
+            $(#gotopeople).state.disabled = false;
+        }
+
+        event click $(#gotohome){
+            //prepareHomeContent()
+            CurrentContent.attributes["state"]="hidden"
+            CurrentContent = HomeContent
+            CurrentContent.attributes["state"]="visible"
+            $(#gotohome).state.disabled = true;
+            $(#gotoprojects).state.disabled = false;
+            $(#gotopeople).state.disabled = false;
+        }
+
+        event click $(#gotopeople){
+            //var people = view.queryPeople()
+            //preparePeopleContent(people)
+            CurrentContent.attributes["state"]="hidden"
+            CurrentContent = PeopleContent
+            CurrentContent.attributes["state"]="visible"
+            $(#gotohome).state.disabled = false;
+            $(#gotoprojects).state.disabled = false;
+            $(#gotopeople).state.disabled = true;
+
+        }
+
+        function onProjectBackendAnswer(){
+            debug log: "result";
+        }
+
+        debug log: self;
+
+        /* todo:  html/js make a loading bar giving info on current task progress : transfering work to backend, backend
+         working, received backend's answer, preparing frntend, done */
+
+    </script>
 </html>
